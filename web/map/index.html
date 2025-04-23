@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>California Disaster Risk Portal</title>
+
+  <!-- Leaflet Core -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet-Geoman -->
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+
+  <!-- Esri Leaflet -->
+  <script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
+
+  <!-- Turf.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <!-- Top Banner -->
+  <div id="top-banner">
+    California Disaster Risk Portal
+    <div id="subtitle">Select layers using the controls on the map.</div>
+  </div>
+
+  <!-- Map + Sidebar Container -->
+  <div id="container">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <h2>Location Report</h2>
+      <div id="report-content">Click the map to view hazard info for a location.</div>
+    </div>
+
+    <!-- Map -->
+    <div id="map"></div>
+  </div>
+
+  <!-- Legend Toggle -->
+  <div class="map-widget leaflet-control leaflet-bar">
+    <a href="#" id="legend-toggle" title="Toggle Legend">🗺️</a>
+  </div>
+
+  <!-- Legend Box -->
+  <div id="legend-box" class="hidden">
+    <h3>Fire Hazard Legend</h3>
+    <div><i style="background:#d7191c;"></i> Very High</div>
+    <div><i style="background:#fdae61;"></i> High</div>
+    <div><i style="background:#ffffbf;"></i> Moderate</div>
+  </div>
+
+  <!-- Main Map Script -->
+  <script src="../js/map.js"></script>
+</body>
+</html>

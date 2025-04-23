@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Top banner */
+  #top-banner {
+    background: linear-gradient(to right, #222222, #0096ff);
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    border-bottom: 2px solid #222222;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    color: white;
+    text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+  }
+  
+  #subtitle {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-top: 0.25rem;
+  }
+  
+  /* Main layout */
+  #container {
+    display: flex;
+    height: calc(100vh - 80px); /* Adjust if banner height changes */
+    border: 1px solid #222222;
+    border-top: none;
+  }
+  
+  /* Optional sidebar */
+  #sidebar {
+    width: 0px; /* Placeholder */
+  }
+  
+  /* Map style */
+  #map {
+    flex-grow: 1;
+    height: calc(100vh - 95px); /* Adjust this to match your header height */
+    border: 2px solid black;
+    z-index: 1;
+    position: relative;
+  }
+  
+/* Custom Widget Buttons (e.g. Home, Legend Toggle) */
+.map-widget {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    text-align: center;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    color: black;
+  }
+  
+  /* Legend Panel Styling */
+  .legend-panel {
+    background-color: white;
+    padding: 10px 12px;
+    margin-top: 10px;
+    width: 200px;
+    font-size: 13px;
+    line-height: 1.4;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  
+  .legend-panel h4 {
+    margin-top: 0;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .legend-section {
+    margin-bottom: 10px;
+  }
+  
+  .legend-section div {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+  }
+  
+  .legend-section i {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 6px;
+    border: 1px solid #888;
+  }
+  
+  /* Hide Element by Default */
+  .hidden {
+    display: none;
+  }
+
+  #container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    border: 3px solid black;
+  }
+  
+  #sidebar {
+    width: 300px;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-right: 2px solid #ccc;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    font-family: sans-serif;
+  }
+  
+  #map {
+    flex-grow: 1;
+  }
+  
+  #report-content {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+  

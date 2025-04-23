@@ -1,0 +1,66 @@
+[
+    {
+      "title": "Landslide Susceptibility",
+      "id": "landslideLayer",
+      "name": "CGS Landslide Susceptibility Map",
+      "type": "dynamic_image",
+      "source": "https://gis.conservation.ca.gov/server/rest/services/CGS/MS58_LandslideSusceptibility_Classes/MapServer",
+      "layerIndex": 0,
+      "description": "Statewide map showing landslide susceptibility classes published by California Geological Survey.",
+      "provider": "CGS",
+      "license": "Public domain",
+      "display": true
+    },
+    {
+      "title": "Fire Hazard Zones",
+      "id": "fireHazardLayer",
+      "type": "vector",
+      "source": "https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/FHSZ_SRA_LRA_Combined/FeatureServer",
+      "layer_id": 0,
+      "description": "Combined SRA and LRA Fire Hazard Severity Zones from CAL FIRE.",
+      "provider": "Cal Fire",
+      "license": "Public domain",
+      "last_updated": "2022-10-01",
+      "visibility": true,
+      "popup_field": "FHSZ_Description",
+      "style": {
+        var hazard = feature.properties.FHSZ_Description;
+        let color = "#ffffff";
+    
+        if (hazard === "Very High") color = "#d7191c";
+        else if (hazard === "High") color = "#fdae61";
+        else if (hazard === "Moderate") color = "#ffffbf";
+    
+        return { color, weight: 1, fillOpacity: 0.4 };
+      }
+    }
+    {
+        "title": "Flood Hazard Zones",
+        "id": "floodLayer",
+        "type": "vector",
+        "source": "https://services2.arcgis.com/Uq9r85Potqm3MfRV/ArcGIS/rest/services/S_FLD_HAZ_AR_Reduced_Set_CA_wm/FeatureServer",
+        "layer_id": 0,
+        "description": "The layer was projected to Web Mercator Auxiliary Sphere. To improve performance Flood Zone values "Area Not Included", "Open Water", "D", "NP", and No Data were removed from the layer. Areas with Flood Zone value "X" subtype "Area of Minimal Flood Hazard" were also removed. (The preceding steps were the same as Esri described in their Living Atlas version).Below are the queries used to aggregate the symbology classes.0.2% Annual Chance Flood Hazard(FLD_ZONE = 'X' AND ZONE_SUBTY = '0.2 PCT ANNUAL CHANCE FLOOD HAZARD') OR(FLD_ZONE = 'X' AND ZONE_SUBTY = '0.2 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL') OR (FLD_ZONE = 'X' AND ZONE_SUBTY = '1 PCT DEPTH LESS THAN 1 FOOT') 1% Annual Chance Flood Hazard(FLD_ZONE = 'A' AND ZONE_SUBTY = '1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL') OR (FLD_ZONE = 'A' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'A99' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'A99' AND ZONE_SUBTY = 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE') OR (FLD_ZONE = 'AE' AND ZONE_SUBTY = '1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN CHANNEL') OR (FLD_ZONE = 'AE' AND ZONE_SUBTY = '1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN STRUCTURE') OR (FLD_ZONE = 'AE' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'AH' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'AO' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'V' AND ZONE_SUBTY IS NULL) OR (FLD_ZONE = 'VE' AND ZONE_SUBTY IS NULL)Regulatory Floodway(FLD_ZONE = 'AE' AND ZONE_SUBTY = 'COLORADO RIVER FLOODWAY') OR (FLD_ZONE = 'AE' AND ZONE_SUBTY = 'FLOODWAY') OR (FLD_ZONE = 'AE' AND ZONE_SUBTY = 'FLOODWAY CONTAINED IN CHANNEL')Area with Reduced Risk Due to Levee(FLD_ZONE = 'X' AND ZONE_SUBTY = 'AREA WITH REDUCED FLOOD RISK DUE TO LEVEE')",
+        "provider": "FEMA,CDFW",
+        "license": "Public domain",
+        "last_updated": "2023-11-29",
+        "visibility": true,
+        "popup_field": "FLD_ZONE",
+        "style": {
+            let zone = feature.properties.FLD_ZONE;
+            let color = "#cccccc";
+        
+            if (zone === "A") color = "#f03b20";
+            else if (zone === "AE") color = "#feb24c";
+            else if (zone === "VE") color = "#bd0026";
+            else if (zone === "X") color = "#a6bddb";
+        
+            return {
+              color: color,
+              weight: 0.5,
+              fillOpacity: 0.4
+            }
+      }
+      
+  ]
+  
