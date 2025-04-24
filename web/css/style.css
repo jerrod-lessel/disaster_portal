@@ -67,16 +67,19 @@ body {
   
   /* Legend Panel Styling */
   .legend-panel {
-    background-color: white;
-    padding: 10px 12px;
-    margin-top: 10px;
-    width: 200px;
-    font-size: 13px;
-    line-height: 1.4;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    max-height: 300px;      /* <--- sets height limit */
+    overflow-y: auto;       /* <--- makes it scroll */
+    width: 250px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 999;           /* ensure it's above the map */
   }
-  
+      
   .legend-panel h4 {
     margin-top: 0;
     font-size: 14px;
@@ -99,6 +102,24 @@ body {
     display: inline-block;
     margin-right: 6px;
     border: 1px solid #888;
+  }
+  
+  .legend-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .legend-panel::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+  
+  .legend-panel::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+  
+  .legend-panel {
+    max-height: 300px;
+    overflow-y: auto;
   }
   
   /* Hide Element by Default */

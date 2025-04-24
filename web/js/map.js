@@ -47,11 +47,18 @@ var floodLayer = L.esri.featureLayer({
   }
 }).addTo(map);
 
+// Earthquake Shaking Potential Layer (visual only)
+var shakingLayer = L.esri.dynamicMapLayer({
+  url: 'https://gis.conservation.ca.gov/server/rest/services/CGS/MS48_ShakingPotential/MapServer',
+  opacity: 0.6
+}).addTo(map);
+
 // Layer Control
 L.control.layers({ "OpenStreetMap": baseOSM }, {
   "Landslide Susceptibility": landslideLayer,
   "Fire Hazard Zones": fireHazardLayer,
-  "Flood Hazard Zones": floodLayer
+  "Flood Hazard Zones": floodLayer,
+  "Shaking Potential": shakingLayer
 }).addTo(map);
 
 // Scale Bar
@@ -74,11 +81,11 @@ homeButton.addTo(map);
 // Legend Toggle & Panel
 var legendToggle = L.control({ position: 'topright' });
 legendToggle.onAdd = () => {
-    var div = L.DomUtil.create('div', 'map-widget leaflet-control leaflet-bar');
-    div.innerHTML = `<a href="#" id="legend-toggle" title="Show/Hide Legend">🗺️</a>`;
-    L.DomEvent.disableClickPropagation(div); // 👈 prevent propagation
-    return div;
-  };  
+  var div = L.DomUtil.create('div', 'map-widget leaflet-control leaflet-bar');
+  div.innerHTML = `<a href="#" id="legend-toggle" title="Show/Hide Legend">🗺️</a>`;
+  L.DomEvent.disableClickPropagation(div);
+  return div;
+};
 legendToggle.addTo(map);
 
 var legendPanel = L.control({ position: 'topright' });
@@ -108,11 +115,39 @@ legendPanel.onAdd = () => {
       <div><i style="background:#feb24c;"></i> 0.2% Annual Chance Flood Hazard</div>
       <div><i style="background:#e5d099;"></i> Area with Reduced Risk Due to Levee</div>
       <div><i style="background:#769ccd;"></i> Regulatory Floodway</div>
-    </div>`;
+    </div>
+    <div class="legend-section">
+  <strong>Earthquake Shaking Potential (SA10)</strong>
+  <div><i style="background:rgb(56,168,0);"></i> &lt; 0.4</div>
+  <div><i style="background:rgb(176,224,0);"></i> 0.4 – 0.8</div>
+  <div><i style="background:rgb(255,225,0);"></i> 0.8 – 1.2</div>
+  <div><i style="background:rgb(255,115,0);"></i> 1.2 – 1.6</div>
+  <div><i style="background:rgb(255,0,0);"></i> 1.6 – 2.0</div>
+  <div><i style="background:rgb(255,0,119);"></i> 2.0 – 2.2</div>
+  <div><i style="background:rgb(255,54,201);"></i> 2.2 – 2.4</div>
+  <div><i style="background:rgb(255,148,221);"></i> 2.4 – 2.5</div>
+  <div><i style="background:rgb(255,191,233);"></i> &gt; 2.5</div>
+</div>
+`;
   return div;
 };
 legendPanel.addTo(map);
 
+// Prevent map zooming when scrolling inside the legend panel
+document.addEventListener('DOMContentLoaded', function () {
+    const legendPanel = document.querySelector('.legend-panel');
+  
+    if (legendPanel) {
+      legendPanel.addEventListener('mouseenter', function () {
+        map.scrollWheelZoom.disable(); // Disable zooming while hovering
+      });
+  
+      legendPanel.addEventListener('mouseleave', function () {
+        map.scrollWheelZoom.enable(); // Re-enable when leaving legend
+      });
+    }
+  });
+  
 document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('legend-toggle').addEventListener('click', function (e) {
     e.preventDefault();
@@ -183,6 +218,7 @@ map.on("click", function (e) {
     completed++;
     if (completed === 2) {
       results.push("🪨 <strong>Landslide Susceptibility:</strong> Visual only");
+      results.push("💥 <strong>Shaking Potential:</strong> Visual only");
       document.getElementById("report-content").innerHTML = results.join("<br><br>");
     }
   }
