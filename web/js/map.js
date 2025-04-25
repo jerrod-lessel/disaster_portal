@@ -100,6 +100,13 @@ legendPanel.onAdd = () => {
       <div><i style="background:#ffffbf;"></i> Moderate</div>
     </div>
     <div class="legend-section">
+      <strong>Flood Zones</strong>
+      <div><i style="background:#f03b20;"></i> 1% Annual Chance Flood Hazard</div>
+      <div><i style="background:#feb24c;"></i> 0.2% Annual Chance Flood Hazard</div>
+      <div><i style="background:#e5d099;"></i> Area with Reduced Risk Due to Levee</div>
+      <div><i style="background:#769ccd;"></i> Regulatory Floodway</div>
+    </div>
+    <div class="legend-section">
       <strong>Landslide Susceptibility</strong>
       <div><i style="background:#9a1e13;"></i> X</div>
       <div><i style="background:#d32d1f;"></i> IX</div>
@@ -110,24 +117,17 @@ legendPanel.onAdd = () => {
       <div><i style="background:#ffffc5;"></i> III</div>
     </div>
     <div class="legend-section">
-      <strong>Flood Zones</strong>
-      <div><i style="background:#f03b20;"></i> 1% Annual Chance Flood Hazard</div>
-      <div><i style="background:#feb24c;"></i> 0.2% Annual Chance Flood Hazard</div>
-      <div><i style="background:#e5d099;"></i> Area with Reduced Risk Due to Levee</div>
-      <div><i style="background:#769ccd;"></i> Regulatory Floodway</div>
-    </div>
-    <div class="legend-section">
-  <strong>Earthquake Shaking Potential (SA10)</strong>
-  <div><i style="background:rgb(56,168,0);"></i> &lt; 0.4</div>
-  <div><i style="background:rgb(176,224,0);"></i> 0.4 – 0.8</div>
-  <div><i style="background:rgb(255,225,0);"></i> 0.8 – 1.2</div>
-  <div><i style="background:rgb(255,115,0);"></i> 1.2 – 1.6</div>
-  <div><i style="background:rgb(255,0,0);"></i> 1.6 – 2.0</div>
-  <div><i style="background:rgb(255,0,119);"></i> 2.0 – 2.2</div>
-  <div><i style="background:rgb(255,54,201);"></i> 2.2 – 2.4</div>
-  <div><i style="background:rgb(255,148,221);"></i> 2.4 – 2.5</div>
-  <div><i style="background:rgb(255,191,233);"></i> &gt; 2.5</div>
-</div>
+      <strong>Earthquake Shaking Potential</strong>
+      <div><i style="background:rgb(255,191,233);"></i> Highest</div>
+      <div><i style="background:rgb(255,148,221);"></i> </div>
+      <div><i style="background:rgb(255,54,201);"></i> </div>
+      <div><i style="background:rgb(255,0,119);"></i> </div>
+      <div><i style="background:rgb(255,0,0);"></i> Moderate</div>
+      <div><i style="background:rgb(255,115,0);"></i> </div>
+      <div><i style="background:rgb(255,225,0);"></i> </div>
+      <div><i style="background:rgb(176,224,0);"></i> </div>
+      <div><i style="background:rgb(56,168,0);"></i> Lowest</div>
+  </div>
 `;
   return div;
 };
@@ -214,6 +214,7 @@ map.on("click", function (e) {
   const results = [];
   let completed = 0;
 
+  // Visual Only Layers
   function checkDone() {
     completed++;
     if (completed === 2) {

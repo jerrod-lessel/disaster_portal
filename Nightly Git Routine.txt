@@ -2,48 +2,55 @@
 Open a terminal and navigate to your project folder:
 
 cd /Users/jerrod/disaster_portal
+
 ✅ Step 2: Check for Changed Files (optional but helpful)
 Run:
 
 git status
+
 This will show you:
-
 Files you've changed
-
 Files you’ve added
-
 Files you’ve deleted
-
 Untracked new files
-
 It’s a good way to review your day's work before saving it.
 
 ✅ Step 3: Stage All Changes
 Run:
 
 git add .
+
 The . means "add all changes in this folder and its subfolders" to the staging area.
 
 ✅ Step 4: Commit Your Changes
 Run:
 
-git commit -m "Daily progress: [describe what you worked on]"
+git commit -m "Daily progress: [work done]"
+
 🔹 Examples:
 
 git commit -m "Daily progress: fixed zone proximity bug and added home button"
 git commit -m "Added flood and fire hazard distance reporting"
-✅ Step 5: Push to GitHub
+
+✅ Step 5: Pull from GitHub
+Run:
+
+git pull --rebase origin main
+
+This uploads your changes to your GitHub repository.
+
+✅ Step 6: Push to GitHub
 Run:
 
 git push
+
 This uploads your changes to your GitHub repository.
 
 🧠 Summary of Commands to Run Each Night
-bash
-Copy
-Edit
+
 cd /Users/jerrod/disaster_portal
 git status
 git add .
 git commit -m "Daily progress: [what you did]"
+git pull
 git push
