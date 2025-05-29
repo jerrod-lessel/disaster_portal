@@ -12,7 +12,10 @@ An interactive web map for exploring wildfire, flood, and landslide hazard risks
 - View your proximity to the nearest:
   - 🔥 Fire hazard zones
   - 🌊 Flood zones
+  - ☁️ Ozone Level
+  - 🌫️ PM2.5 Concentation
   - 🪨 Landslide susceptibility areas (visual only for now)
+  - 💥 Shaking Potential (visual only for now)
 - Toggle legends and reset the view
 - Responsive design with performance optimization in mind
 
