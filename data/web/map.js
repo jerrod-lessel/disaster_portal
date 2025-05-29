@@ -27,6 +27,7 @@ var landslideLayer = L.esri.dynamicMapLayer({
 // Fire Hazard Layer
 var fireHazardLayer = L.esri.featureLayer({
   url: 'https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/FHSZ_SRA_LRA_Combined/FeatureServer/0',
+  attribution: 'CAL FIRE',
   style: function (feature) {
     const hazard = feature.properties.FHSZ_Description;
     let color = "#ffffff";
@@ -60,6 +61,7 @@ var floodLayer = L.esri.featureLayer({
 var ozoneLayer = L.esri.featureLayer({
   url: "https://services1.arcgis.com/PCHfdHz4GlDNAhBb/arcgis/rest/services/CalEnviroScreen_4_0_Results_/FeatureServer/0",
   where: "ozoneP IS NOT NULL",
+  attribution: 'OEHHA - CalEnviroScreen 4.0',
   style: function (feature) {
     const percentile = feature.properties.ozoneP;
     let color = "#ffffcc"; // default light yellow
@@ -83,6 +85,7 @@ var ozoneLayer = L.esri.featureLayer({
 var pmLayer = L.esri.featureLayer({
   url: "https://services1.arcgis.com/PCHfdHz4GlDNAhBb/arcgis/rest/services/CalEnviroScreen_4_0_Results_/FeatureServer/0",
   where: "pmP IS NOT NULL",
+  attribution: 'OEHHA - CalEnviroScreen 4.0',
   style: function (feature) {
     const percentile = feature.properties.pmP;
     let color = "#ffffcc"; // lightest
