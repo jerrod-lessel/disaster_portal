@@ -105,6 +105,29 @@ var pmLayer = L.esri.featureLayer({
   }
 }).addTo(map);
 
+// CalEnviroScreen Drinking Water Contaminant Percentile Layer
+var drinkP_Layer = L.esri.featureLayer({
+  url: "https://services1.arcgis.com/PCHfdHz4GlDNAhBb/arcgis/rest/services/CalEnviroScreen_4_0_Results_/FeatureServer/0",
+  where: "drinkP IS NOT NULL",
+  attribution: 'OEHHA - CalEnviroScreen 4.0',
+  style: function (feature) {
+    const percentile = feature.properties.drinkP;
+    let color = "#ffffcc"; // Default dull yellow
+
+    if (percentile >= 90) color = "#08306b";
+    else if (percentile >= 80) color = "#08519c";
+    else if (percentile >= 70) color = "#2171b5";
+    else if (percentile >= 60) color = "#4292c6";
+    else if (percentile >= 50) color = "#6baed6";
+    else if (percentile >= 40) color = "#9ecae1";
+    else if (percentile >= 30) color = "#c6dbef";
+    else if (percentile >= 20) color = "#deebf7";
+    else if (percentile >= 10) color = "#f7fbff";
+    else color = "#ffffcc";
+
+    return { color: color, weight: 0.5, fillOpacity: 0.6 };
+  }
+}).addTo(map);
 
 // Earthquake Shaking Potential Layer (visual only)
 var shakingLayer = L.esri.dynamicMapLayer({
@@ -134,6 +157,7 @@ L.control.layers({ "OpenStreetMap": baseOSM }, {
   "Shaking Potential": shakingLayer,
   "Ozone Percentiles": ozoneLayer,
   "PM2.5 Concentration": pmLayer,
+  "Water Contaminant Percentile": drinkP_Layer,
 }).addTo(map);
 
 // Scale Bar
@@ -196,6 +220,19 @@ legendPanel.onAdd = () => {
     </div>
     <div class="legend-section">
       <strong>PM2.5 Percentile</strong>
+      <div><i style="background:#08306b;"></i> 90–100</div>
+      <div><i style="background:#08519c;"></i> 80–89</div>
+      <div><i style="background:#2171b5;"></i> 70–79</div>
+      <div><i style="background:#4292c6;"></i> 60–69</div>
+      <div><i style="background:#6baed6;"></i> 50–59</div>
+      <div><i style="background:#9ecae1;"></i> 40–49</div>
+      <div><i style="background:#c6dbef;"></i> 30–39</div>
+      <div><i style="background:#deebf7;"></i> 20–29</div>
+      <div><i style="background:#f7fbff;"></i> 10–19</div>
+      <div><i style="background:#ffffcc;"></i> 0–9</div>
+    </div>
+        <div class="legend-section">
+      <strong>Drinking Water Contaminant Percentile</strong>
       <div><i style="background:#08306b;"></i> 90–100</div>
       <div><i style="background:#08519c;"></i> 80–89</div>
       <div><i style="background:#2171b5;"></i> 70–79</div>
@@ -298,7 +335,7 @@ map.on("click", function (e) {
 
   function checkDone() {
     completed++;
-    if (completed === 4) {
+    if (completed === 5) {
       // Query Landslide Pixel
       if (landslideRaster) {
         const [x_proj, y_proj] = proj4("EPSG:4326", "EPSG:3310", [e.latlng.lng, e.latlng.lat]);
@@ -388,6 +425,25 @@ pmLayer.query().contains(e.latlng).run(function (err, fc) {
       e.latlng,
       "PM2.5 Concentration",
       "pmP",
+      results,
+      checkDone
+    );
+  }
+});
+
+drinkP_Layer.query().contains(e.latlng).run(function (err, fc) {
+  if (!err && fc.features.length > 0) {
+    const props = fc.features[0].properties;
+    const value = props.drink?.toFixed(2) ?? "unknown";
+    const pct = props.drinkP !== undefined ? Math.round(props.drinkP) : "unknown";
+    results.push(`🚰 <strong>Drinking Water Contaminant Score:</strong> ${value} <br>📊 Percentile: ${pct}`);
+    checkDone();
+  } else {
+    getClosestFeatureByEdgeDistance(
+      drinkP_Layer,
+      e.latlng,
+      "Drinking Water Contaminant Score",
+      "drinkP",
       results,
       checkDone
     );
