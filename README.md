@@ -14,6 +14,7 @@ An interactive web map for exploring wildfire, flood, and landslide hazard risks
   - 🌊 Flood zones
   - ☁️ Ozone Level
   - 🌫️ PM2.5 Concentation
+  - 🚰 Drinking Water Contaminant
   - 🪨 Landslide susceptibility areas (visual only for now)
   - 💥 Shaking Potential (visual only for now)
 - Toggle legends and reset the view
