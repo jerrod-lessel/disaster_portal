@@ -375,30 +375,48 @@ map.on("click", function (e) {
       }
     }
   }
+
   fireHazardLayer.query().contains(e.latlng).run(function (err, fc) {
-    if (!err && fc.features.length > 0) {
-      results.push(`🔥 <strong>Fire Hazard Zone:</strong> ${fc.features[0].properties.FHSZ_Description}`);
+  if (!err && fc.features.length > 0) {
+    const zone = fc.features[0].properties.FHSZ_Description;
+    results.push(`🔥 <strong>Fire Hazard Zone:</strong><br>
+This area falls within a <strong>${zone}</strong> fire hazard zone as defined by the California Department of Forestry and Fire Protection (CAL FIRE).<br>
+Fire hazard zones reflect the severity of potential fire exposure based on fuels, terrain, weather, and other factors.`);
+    checkDone();
+  } else {
+    getClosestFeatureByEdgeDistance(fireHazardLayer, e.latlng, "Fire Hazard Zone", "FHSZ_Description", results, function () {
+      results.push(`🔥 <em>Note:</em> Fire hazard zones are designated by CAL FIRE to help guide planning and mitigation efforts in wildfire-prone regions.`);
       checkDone();
-    } else {
-      getClosestFeatureByEdgeDistance(fireHazardLayer, e.latlng, "Fire Hazard Zone", "FHSZ_Description", results, checkDone);
-    }
-  });
+    });
+  }
+});
 
   floodLayer.query().contains(e.latlng).run(function (err, fc) {
-    if (!err && fc.features.length > 0) {
-      results.push(`🌊 <strong>Flood Hazard Zone:</strong> ${fc.features[0].properties.ESRI_SYMBOLOGY}`);
+  if (!err && fc.features.length > 0) {
+    const zone = fc.features[0].properties.ESRI_SYMBOLOGY;
+    results.push(`🌊 <strong>Flood Hazard Zone:</strong><br>
+This location falls within a <strong>${zone}</strong> as designated by FEMA's National Flood Hazard Layer.<br>
+Flood zones represent areas at varying levels of flood risk during extreme weather events and are used to inform insurance, development, and evacuation planning.`);
+    checkDone();
+  } else {
+    getClosestFeatureByEdgeDistance(floodLayer, e.latlng, "Flood Hazard Zone", "ESRI_SYMBOLOGY", results, function () {
+      results.push(`🌊 <em>Note:</em> FEMA flood zones help identify areas at high risk for flooding and guide floodplain management decisions across California.`);
       checkDone();
-    } else {
-      getClosestFeatureByEdgeDistance(floodLayer, e.latlng, "Flood Hazard Zone", "ESRI_SYMBOLOGY", results, checkDone);
-    }
-  });
+    });
+  }
+});
+
 
   ozoneLayer.query().contains(e.latlng).run(function (err, fc) {
   if (!err && fc.features.length > 0) {
     const props = fc.features[0].properties;
     const ppm = props.ozone?.toFixed(3) ?? "unknown";
     const pct = props.ozoneP !== undefined ? Math.round(props.ozoneP) : "unknown";
-    results.push(`☁️ <strong>Ozone Level:</strong> ${ppm} ppm<br>📊 Percentile: ${pct}`);
+    results.push(`☁️ <strong>Ozone (Ground-Level):</strong><br>
+The indicator is the mean of summer months (May – October) of the daily maximum 8-hour ozone concentration (ppm). This measurement is used to represent short-term ozone health impacts. This census tract has a summed concentration of <strong>${ppm} ppm</strong>.
+The ozone percentile for this census tract is <strong>${pct}</strong>, meaning the summed concentration is higher than ${pct}% of the census tracts in California.<br>
+(Data from 2017 to 2019)`);
+
     checkDone();
   } else {
     getClosestFeatureByEdgeDistance(
@@ -417,7 +435,9 @@ pmLayer.query().contains(e.latlng).run(function (err, fc) {
     const props = fc.features[0].properties;
     const value = props.pm?.toFixed(2) ?? "unknown";
     const pct = props.pmP !== undefined ? Math.round(props.pmP) : "unknown";
-    results.push(`🌫️ <strong>PM2.5 Concentration:</strong> ${value} µg/m³<br>📊 Percentile: ${pct}`);
+    results.push(`🌫️ <strong>PM2.5 (Fine Particulate Matter) Concentration:</strong><br>
+This census tract has a concentration of <strong>${value} µg/m³</strong>. The PM2.5 percentile for this census tract is <strong>${pct}</strong>, meaning it is higher than ${pct}% of the census tracts in California.<br>
+(Data from 2015 to 2017)`);
     checkDone();
   } else {
     getClosestFeatureByEdgeDistance(
@@ -436,7 +456,11 @@ drinkP_Layer.query().contains(e.latlng).run(function (err, fc) {
     const props = fc.features[0].properties;
     const value = props.drink?.toFixed(2) ?? "unknown";
     const pct = props.drinkP !== undefined ? Math.round(props.drinkP) : "unknown";
-    results.push(`🚰 <strong>Drinking Water Contaminant Score:</strong> ${value} <br>📊 Percentile: ${pct}`);
+    results.push(`🚰 <strong>Drinking Water Contaminants:</strong><br>
+The drinking water contaminant score for this census tract is <strong>${value}</strong>, which is the sum of the contaminant and violation percentiles.
+The drinking water contaminant percentile is <strong>${pct}</strong>, meaning it is higher than ${pct}% of census tracts in California.<br>
+(Data from 2011–2019, the most recent complete compliance cycle.)`);
+
     checkDone();
   } else {
     getClosestFeatureByEdgeDistance(
