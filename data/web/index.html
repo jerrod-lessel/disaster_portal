@@ -18,17 +18,12 @@
   <!-- Turf.js -->
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 
+
   <!-- Load GeoRaster and GeoRasterLayer -->
   <script src="https://unpkg.com/georaster"></script>
   <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
 
-  <!-- Proj4 (in case needed) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
-
-  <!-- Style -->
-  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <!-- Top Banner -->
   <div id="top-banner">
@@ -36,21 +31,20 @@
     <div id="subtitle">Select layers using the controls on the map.</div>
   </div>
 
-  <!-- Main Container -->
+  <!-- Map + Sidebar Container -->
   <div id="container">
     <!-- Sidebar -->
     <div id="sidebar">
       <h2>Location Report</h2>
       <div id="report-content">
-        <em>Click on the map to load data.</em>
-      </div>
-    </div>
+  <em>Click on the map to load data.</em>
+</div>
 
     <!-- Map -->
     <div id="map"></div>
-  </div> <!-- ✅ Correctly closed container -->
+  </div>
 
-  <!-- Legend Toggle Button -->
+  <!-- Legend Toggle -->
   <div class="map-widget leaflet-control leaflet-bar">
     <a href="#" id="legend-toggle" title="Toggle Legend">🗺️</a>
   </div>
@@ -63,7 +57,15 @@
     <div><i style="background:#ffffbf;"></i> Moderate</div>
   </div>
 
-  <!-- Main JS -->
-  <script src="map.js"></script>
+  <!-- georaster for reading the landslide TIFF -->
+  <script src="https://unpkg.com/georaster"></script>
+
+  <!-- georaster-layer-for-leaflet (only if you want to display the raster, optional) -->
+  <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+
+  <!-- Main Map Script -->
+  <script src="../web/map.js"></script>
 </body>
 </html>
