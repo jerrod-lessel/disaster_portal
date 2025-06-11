@@ -134,7 +134,7 @@ var shakingLayer = L.esri.dynamicMapLayer({
   url: 'https://gis.conservation.ca.gov/server/rest/services/CGS/MS48_ShakingPotential/MapServer',
   opacity: 0.6
 }).addTo(map);
-/*
+
 // --- Load Landslide Raster ---
 parseGeoraster("https://localhost:8001/raster/ms58_ls_susceptibility_20181001_tiff/ms58_ls_susceptibility_20181001_cog.tif", { 
   fullRaster: true 
@@ -146,7 +146,7 @@ parseGeoraster("https://localhost:8001/raster/ms58_ls_susceptibility_20181001_ti
   .catch(error => {
     console.error("❌ Error loading raster:", error);
   });
-*/
+
 // --- Controls ---
 
 // Layer Control
