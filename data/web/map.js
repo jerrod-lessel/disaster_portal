@@ -136,7 +136,7 @@ var shakingLayer = L.esri.dynamicMapLayer({
 }).addTo(map);
 
 // --- Load Landslide Raster ---
-parseGeoraster("http://localhost:8001/raster/ms58_ls_susceptibility_20181001_tiff/ms58_ls_susceptibility_20181001_cog.tif", { 
+parseGeoraster("https://localhost:8001/raster/ms58_ls_susceptibility_20181001_tiff/ms58_ls_susceptibility_20181001_cog.tif", { 
   fullRaster: true 
 })
   .then(function (georaster) {
