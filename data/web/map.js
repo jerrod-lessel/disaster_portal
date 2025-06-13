@@ -326,7 +326,8 @@ map.on("click", function (e) {
     if (completed === 5) {
       results.push("🪨 <strong>Landslide Susceptibility:</strong> Visual only");
       results.push("💥 <strong>Shaking Potential:</strong> Visual only");
-      document.getElementById("report-content").innerHTML = results.join("<br><br>");}
+      document.getElementById("report-content").innerHTML = results.join("<br><br>");
+    }
   }
 
   fireHazardLayer.query().contains(e.latlng).run(function (err, fc) {
