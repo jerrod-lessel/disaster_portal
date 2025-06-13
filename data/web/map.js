@@ -135,18 +135,6 @@ var shakingLayer = L.esri.dynamicMapLayer({
   opacity: 0.6
 }).addTo(map);
 
-// --- Load Landslide Raster ---
-parseGeoraster("https://localhost:8001/raster/ms58_ls_susceptibility_20181001_tiff/ms58_ls_susceptibility_20181001_cog.tif", { 
-  fullRaster: true 
-})
-  .then(function (georaster) {
-    console.log("✅ Landslide raster loaded:", georaster);
-    landslideRaster = georaster;
-  })
-  .catch(error => {
-    console.error("❌ Error loading raster:", error);
-  });
-
 // --- Controls ---
 
 // Layer Control
@@ -336,44 +324,9 @@ map.on("click", function (e) {
   function checkDone() {
     completed++;
     if (completed === 5) {
-      // Query Landslide Pixel
-      if (landslideRaster) {
-        const [x_proj, y_proj] = proj4("EPSG:4326", "EPSG:3310", [e.latlng.lng, e.latlng.lat]);
-
-        const pixelX = Math.floor((x_proj - landslideRaster.xmin) / landslideRaster.pixelWidth);
-        const pixelY = Math.floor((landslideRaster.ymax - y_proj) / landslideRaster.pixelHeight);
-      
-        if (
-          pixelX >= 0 && pixelX < landslideRaster.width &&
-          pixelY >= 0 && pixelY < landslideRaster.height
-        ) {
-          landslideRaster.getValues({ window: [pixelX, pixelY, pixelX + 1, pixelY + 1] })
-            .then(values => {
-              const pixelValue = values[0][0];
-              if (pixelValue === landslideRaster.noDataValue || pixelValue === undefined) {
-                results.push(`🪨 <strong>Landslide Susceptibility:</strong> No Data`);
-              } else if (pixelValue === 0) {
-                results.push(`🪨 <strong>Landslide Susceptibility:</strong> Not in a landslide zone`);
-              } else {
-                results.push(`🪨 <strong>Landslide Susceptibility:</strong> Class ${pixelValue}`);
-              }
-
-              // Finalize and write to DOM
-              results.push("💥 <strong>Shaking Potential:</strong> Visual only");
-              document.getElementById("report-content").innerHTML = results.join("<br><br>");
-            })
-            .catch(error => {
-              console.error("❌ Error reading raster value:", error);
-              results.push(`🪨 <strong>Landslide Susceptibility:</strong> (failed to read pixel)`);
-              document.getElementById("report-content").innerHTML = results.join("<br><br>");
-            });
-        } else {
-          results.push(`🪨 <strong>Landslide Susceptibility:</strong> Outside raster bounds`);
-          results.push("💥 <strong>Shaking Potential:</strong> Visual only");
-          document.getElementById("report-content").innerHTML = results.join("<br><br>");
-        }
-      }
-    }
+      results.push("🪨 <strong>Landslide Susceptibility:</strong> Visual only");
+      results.push("💥 <strong>Shaking Potential:</strong> Visual only");
+      document.getElementById("report-content").innerHTML = results.join("<br><br>");}
   }
 
   fireHazardLayer.query().contains(e.latlng).run(function (err, fc) {
