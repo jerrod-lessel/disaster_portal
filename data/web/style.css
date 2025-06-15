@@ -101,6 +101,51 @@ html, body {
   z-index: 1;
 }
 
+#loader {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.spinner {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 16px;
+}
+
+.spinner div {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  animation: spinner-dots 1.2s infinite ease-in-out;
+}
+
+.spinner div:nth-child(1) {
+  left: 0px;
+  animation-delay: -0.24s;
+}
+
+.spinner div:nth-child(2) {
+  left: 16px;
+  animation-delay: -0.12s;
+}
+
+.spinner div:nth-child(3) {
+  left: 32px;
+  animation-delay: 0;
+}
+
+@keyframes spinner-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  } 40% {
+    transform: scale(1);
+  }
+}
+
 #report-content {
   font-size: 0.95rem;
   line-height: 1.4;
