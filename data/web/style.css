@@ -28,20 +28,8 @@ body {
     font-weight: normal;
     margin-top: 0.25rem;
   }
-  
+ 
   /* Main layout */
-  #container {
-    display: flex;
-    height: calc(100vh - 80px); /* Adjust if banner height changes */
-    border: 1px solid #222222;
-    border-top: none;
-  }
-  
-  /* Optional sidebar */
-  #sidebar {
-    width: 0px; /* Placeholder */
-  }
-  
   /* Map style */
   #map {
     flex-grow: 1;
