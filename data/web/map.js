@@ -2,6 +2,10 @@
 
 // Initialize the map
 var map = L.map('map').setView([37.5, -119.5], 6);
+// Force map to resize/repaint once fully loaded
+setTimeout(() => {
+  map.invalidateSize();
+}, 200);
 
 // Base Layer
 var baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
