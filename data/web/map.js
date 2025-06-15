@@ -25,6 +25,12 @@ document.getElementById('about-toggle').addEventListener('click', function () {
   document.getElementById('about-panel').classList.toggle('hidden');
 });
 
+function showSpinner() {
+  document.getElementById("loading-spinner").classList.remove("hidden");
+}
+function hideSpinner() {
+  document.getElementById("loading-spinner").classList.add("hidden");
+}
 
 // --- Layers ---
 
@@ -321,6 +327,7 @@ function getClosestFeatureByEdgeDistance(layer, clickLatLng, label, fieldName, r
 
 // --- Click Event Logic ---
 map.on("click", function (e) {
+  showSpinner();
   if (clickMarker) map.removeLayer(clickMarker);
   clickMarker = L.marker(e.latlng).addTo(map);
 
@@ -337,6 +344,7 @@ map.on("click", function (e) {
       results.push("🪨 <strong>Landslide Susceptibility:</strong> Visual only");
       results.push("💥 <strong>Shaking Potential:</strong> Visual only");
       document.getElementById("report-content").innerHTML = results.join("<br><br>");
+      hideSpinner();
     }
   }
 
