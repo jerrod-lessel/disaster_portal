@@ -164,8 +164,4 @@ body {
     flex-grow: 1;
     height: calc(100vh - 200px);
   }
-}
-html, body {
-  overscroll-behavior: contain;  /* Prevent elastic scrolling / bounce on mobile */
-}
 
