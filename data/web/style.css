@@ -203,7 +203,7 @@ html, body {
 
 .spinner {
   border: 8px solid #f3f3f3; /* Light grey */
-  border-top: 8px solid #0096ff; /* Blue */
+  border-top: 8px solid #2c5364; /* Blue-Grey to match right side of banner */
   border-radius: 50%;
   width: 60px;
   height: 60px;
