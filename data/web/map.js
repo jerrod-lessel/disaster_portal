@@ -327,7 +327,8 @@ map.on("click", function (e) {
   const lat = e.latlng.lat;
   const lng = e.latlng.lng;
   document.getElementById("report-content").innerHTML = `<strong>Location:</strong><br>Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}<br><em>Loading hazard information...</em>`;
-
+  document.getElementById("loader").classList.remove("hidden");
+  
   const results = [];
   let completed = 0;
 
