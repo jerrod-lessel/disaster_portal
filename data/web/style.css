@@ -194,9 +194,9 @@ html, body {
 }
 
 #loading-spinner {
-  position: fixed;
+  position: absolute;
   top: 50%;
-  left: 50%;
+  left: 150px; /* Half of sidebar width (300px) */
   transform: translate(-50%, -50%);
   z-index: 2000;
 }
