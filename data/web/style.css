@@ -3,6 +3,7 @@ body {
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
+    overflow: hidden;  /* Prevent page scroll */
   }
   
   /* Top banner */
@@ -22,7 +23,11 @@ body {
     -1px  1px 0 #000,
      1px  1px 0 #000;
   }
-  
+
+    html {
+      height: 100%;  /* Ensure full height */
+    }
+
   #subtitle {
     font-size: 1rem;
     font-weight: normal;
