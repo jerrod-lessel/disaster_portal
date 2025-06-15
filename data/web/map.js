@@ -22,7 +22,7 @@ proj4.defs("EPSG:3310", "+proj=aea +lat_1=34 +lat_2=40.5 +lat_0=0 +lon_0=-120 +x
 var landslideLayer = L.esri.dynamicMapLayer({
   url: 'https://gis.conservation.ca.gov/server/rest/services/CGS/MS58_LandslideSusceptibility_Classes/MapServer',
   opacity: 0.6
-}).addTo(map);
+})//.addTo(map);
 
 // Fire Hazard Layer
 var fireHazardLayer = L.esri.featureLayer({
@@ -36,7 +36,7 @@ var fireHazardLayer = L.esri.featureLayer({
     else if (hazard === "Moderate") color = "#ffffbf";
     return { color, weight: 1, fillOpacity: 0.4 };
   }
-}).addTo(map);
+})//.addTo(map);
 
 // Flood Hazard Layer
 var floodLayer = L.esri.featureLayer({
@@ -55,7 +55,7 @@ var floodLayer = L.esri.featureLayer({
       fillOpacity: 0.6
     };
   }
-}).addTo(map);
+})//.addTo(map);
 
 // CalEnviroScreen Ozone Layer
 var ozoneLayer = L.esri.featureLayer({
@@ -79,7 +79,7 @@ var ozoneLayer = L.esri.featureLayer({
 
     return { color: color, weight: 0.5, fillOpacity: 0.6 };
   }
-}).addTo(map);
+})//.addTo(map);
 
 // CalEnviroScreen PM2.5 Layer
 var pmLayer = L.esri.featureLayer({
@@ -103,7 +103,7 @@ var pmLayer = L.esri.featureLayer({
 
     return { color: color, weight: 0.5, fillOpacity: 0.6 };
   }
-}).addTo(map);
+})//.addTo(map);
 
 // CalEnviroScreen Drinking Water Contaminant Percentile Layer
 var drinkP_Layer = L.esri.featureLayer({
@@ -127,13 +127,13 @@ var drinkP_Layer = L.esri.featureLayer({
 
     return { color: color, weight: 0.5, fillOpacity: 0.6 };
   }
-}).addTo(map);
+})//.addTo(map);
 
 // Earthquake Shaking Potential Layer (visual only)
 var shakingLayer = L.esri.dynamicMapLayer({
   url: 'https://gis.conservation.ca.gov/server/rest/services/CGS/MS48_ShakingPotential/MapServer',
   opacity: 0.6
-}).addTo(map);
+})//.addTo(map);
 
 // --- Controls ---
 
