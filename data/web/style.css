@@ -31,6 +31,10 @@ html, body {
   flex-direction: column;
 }
 
+#site-logo {
+  height: 40px;
+}
+
 #main-title {
   font-size: 1.5rem;
   font-weight: bold;
