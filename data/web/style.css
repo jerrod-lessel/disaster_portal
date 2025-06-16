@@ -19,6 +19,7 @@ html, body {
   top: 0;
   z-index: 1000;
   color: white;
+  flex-direction: column;
   text-shadow: 
     -1px -1px 0 #000,  
      1px -1px 0 #000,
@@ -215,6 +216,23 @@ html, body {
   margin-right: 10px;
   vertical-align: middle;
 }
+
+#logo-title {
+  display: flex;
+  align-items: center;
+}
+
+#logo-title span {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
 #top-banner span {
   vertical-align: middle;
 }
