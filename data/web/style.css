@@ -31,10 +31,6 @@ html, body {
   flex-direction: column;
 }
 
-#site-logo {
-  height: 40px;
-}
-
 #main-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -221,7 +217,7 @@ html, body {
 }
 
 #site-logo {
-  height: 50px;
+  height: 45px;
   margin-right: 0.5rem;
 }
 
