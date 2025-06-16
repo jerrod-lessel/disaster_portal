@@ -219,7 +219,6 @@ html, body {
 
 #logo-title {
   display: flex;
-  align-items: center;
 }
 
 #logo-title span {
