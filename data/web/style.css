@@ -26,6 +26,42 @@ html, body {
      1px  1px 0 #000;
 }
 
+##########################################
+#site-logo {
+  height: 40px;
+}
+
+#site-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+#site-subtitle {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+#about-button {
+  margin-left: auto; /* pushes it to far right */
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#about-button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+##########################################
+
+
 #title-container {
   display: flex;
   flex-direction: column;
