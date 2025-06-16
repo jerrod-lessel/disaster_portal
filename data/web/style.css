@@ -210,6 +210,15 @@ html, body {
   animation: spin 1s linear infinite;
 }
 
+#site-logo {
+  height: 40px; /* or whatever looks good */
+  margin-right: 10px;
+  vertical-align: middle;
+}
+#top-banner span {
+  vertical-align: middle;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
