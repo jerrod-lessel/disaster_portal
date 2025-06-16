@@ -214,7 +214,6 @@ html, body {
 #site-logo {
   height: 40px; /* or whatever looks good */
   margin-right: 10px;
-  vertical-align: middle;
 }
 
 #logo-title {
@@ -230,10 +229,6 @@ html, body {
      1px -1px 0 #000,
     -1px  1px 0 #000,
      1px  1px 0 #000;
-}
-
-#top-banner span {
-  vertical-align: middle;
 }
 
 @keyframes spin {
