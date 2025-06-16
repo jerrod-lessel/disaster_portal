@@ -201,3 +201,58 @@ html, body {
     height: calc(100vh - 80px - 200px); /* Banner + sidebar height */
   }
 }
+
+#top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #0f2027;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  color: white;
+}
+
+#left-banner {
+  display: flex;
+  align-items: center;
+}
+
+#site-logo {
+  height: 40px;
+  margin-right: 0.5rem;
+}
+
+#titles {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  /* Ensures left alignment */
+}
+
+#main-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+#subtitle {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+#about-toggle {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#about-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
