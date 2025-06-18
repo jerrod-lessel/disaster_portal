@@ -61,7 +61,9 @@ html, body {
   color: #333;
   padding: 1rem;
   font-size: 0.95rem;
-  border-bottom: 2px solid #ccc;
+  #border-bottom: 2px solid #ccc;
+  border-radius: 20px;
+  #background-color: #5A5A5A; /* Grey background */
 }
 
 #about-panel h3 {
@@ -83,19 +85,21 @@ html, body {
   width: 100%;
   border: 3px solid black;
   overflow: hidden; /* Ensure no extra scrolling space */
+  background-color: #000000;
 }
 
 #sidebar {
   width: 300px;
-  background-color: #f8f8f8;
   padding: 15px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border-right: 2px solid #ccc;
   overflow-y: auto;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   max-height: 100%; /* ⬅ Add this so the sidebar fills its space and scrolls fully */
+  border-radius: 20px;
+  background-color: #5A5A5A; /* Grey background */
+  color: #fff;  /* Optional: white text for contrast */
 }
 
 #map {
@@ -104,6 +108,8 @@ html, body {
   border: 2px solid black;
   position: relative;
   z-index: 1;
+  border-radius: 20px;
+  overflow: hidden;  /* Ensures inner map doesn't spill out of rounded corners */
 }
 
 #report-content {
@@ -190,7 +196,7 @@ html, body {
     width: 100%;
     height: 200px;
     border-right: none;
-    border-bottom: 2px solid #ccc;
+    #border-bottom: 2px solid #ccc;
   }
 
   #map {
