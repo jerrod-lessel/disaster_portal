@@ -169,6 +169,7 @@ var allRoadsLayer = L.esri.featureLayer({
   }
 })//.addTo(map);
 
+// Public schools 
 var schoolsLayer = L.esri.featureLayer({
   url: 'https://services3.arcgis.com/fdvHcZVgB2QSRNkL/arcgis/rest/services/SchoolSites2324/FeatureServer/0',
   attribution: 'California Department of Education',
@@ -203,6 +204,88 @@ var schoolsLayer = L.esri.featureLayer({
   }
 });
 
+// Hospitals and health centers
+var healthCentLayer = L.esri.featureLayer({
+  url: 'https://services5.arcgis.com/fMBfBrOnc6OOzh7V/arcgis/rest/services/facilitylist/FeatureServer/0',
+  attribution: 'California Office of Statewide Health Planning and Development',
+  pointToLayer: function (geojson, latlng) {
+    return L.marker(latlng, {
+    icon: L.divIcon({
+      html: "🏥",
+      className: "healthCent-icon",
+      iconSize: L.point(30, 30),
+      })
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    var props = feature.properties;
+    var name = props.FacilityName || "Unknown Facility";
+    var status = props.FacilityStatus || "Unknown Status";
+    var type = props.LicenseType || "N/A";
+    layer.bindPopup(`
+    <strong>HOSPITAL/HEALTH CENTER</strong><br>
+    Name: ${name}<br>
+    Status: ${status}<br>
+    Type: ${type}<br>
+  `);
+  }
+});
+
+// Public airports
+var pubAirport = L.esri.featureLayer({
+  url: 'https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHaviation/Public_Airport/FeatureServer/0',
+  attribution: 'California Office of Statewide Health Planning and Development',
+  pointToLayer: function (geojson, latlng) {
+    return L.marker(latlng, {
+    icon: L.divIcon({
+      html: "✈️",
+      className: "airport-icon",
+      iconSize: L.point(30, 30),
+      })
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    var props = feature.properties;
+    var name = props.FACILITY || "Unknown Facility";
+    var classType = props.FNCTNLCLSS || "Unknown Class";
+    var ID = props.AIRPORTID || "N/A";
+    layer.bindPopup(`
+    <strong>PUBLIC AIRPORTS</strong><br>
+    Name: ${name}<br>
+    Class: ${classType}<br>
+    Airport ID: ${ID}<br>
+  `);
+  }
+});
+
+// Power plants
+var powerPlants = L.esri.featureLayer({
+  url: 'https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Power_Plant/FeatureServer/0',
+  attribution: 'California Energy Commission',
+  pointToLayer: function (geojson, latlng) {
+    return L.marker(latlng, {
+    icon: L.divIcon({
+      html: "⚡",
+      className: "power-icon",
+      iconSize: L.point(30, 30),
+      })
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    var props = feature.properties;
+    var name = props.PlantName || "Unknown Facility";
+    var nrgSource = props.PriEnergySource || "Unknown Energy Source";
+    var cap = props.Capacity_Latest || "Unknown Capacity";
+    layer.bindPopup(`
+    <strong>POWER PLANT</strong><br>
+    Name: ${name}<br>
+    Primary Energy Source: ${nrgSource}<br>
+    Capacity (MW): ${cap}<br>
+  `);
+  }
+});
+
+// State bridges
 var stateBridgesLayer = L.esri.featureLayer({
   url: "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/State_Highway_Bridges/FeatureServer/0",
   attribution: 'Caltrans',
@@ -229,6 +312,7 @@ var stateBridgesLayer = L.esri.featureLayer({
   }
 });
 
+// Local bridges
 var localBridgesLayer = L.esri.featureLayer({
   url: "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/Local_Bridges/FeatureServer/0",
   attribution: 'Caltrans',
@@ -294,6 +378,33 @@ map.on("zoomend", function () {
   }
 });
 
+// Health center layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(healthCentLayer)) map.addLayer(healthCentLayer);
+  } else {
+    if (map.hasLayer(healthCentLayer)) map.removeLayer(healthCentLayer);
+  }
+});
+
+// Public airport layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(pubAirport)) map.addLayer(pubAirport);
+  } else {
+    if (map.hasLayer(pubAirport)) map.removeLayer(pubAirport);
+  }
+});
+
+// Power plant layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(powerPlants)) map.addLayer(powerPlants);
+  } else {
+    if (map.hasLayer(powerPlants)) map.removeLayer(powerPlants);
+  }
+});
+
 // --- Controls ---
 
 // Layer Control
@@ -302,6 +413,10 @@ L.control.layers({ "OpenStreetMap": baseOSM }, {
   "All Roads": allRoadsLayer,
   "State Highway Bridges": stateBridgesLayer,
   "Local Bridges": localBridgesLayer,
+  "Public Schools (K-12)": schoolsLayer,
+  "Hospitals and Health Centers": healthCentLayer,
+  "Public Airports": pubAirport,
+  "Power Plants": powerPlants,
   "Landslide Susceptibility": landslideLayer,
   "Fire Hazard Zones": fireHazardLayer,
   "Flood Hazard Zones": floodLayer,
@@ -309,7 +424,6 @@ L.control.layers({ "OpenStreetMap": baseOSM }, {
   "Ozone Percentiles": ozoneLayer,
   "PM2.5 Concentration": pmLayer,
   "Water Contaminant Percentile": drinkP_Layer,
-  "Public Schools (K-12)": schoolsLayer,
 }).addTo(map);
 
 // Scale Bar
