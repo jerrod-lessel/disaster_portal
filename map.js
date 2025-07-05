@@ -1,4 +1,4 @@
-// map.js - full version with Landslide Raster querying added
+// map.js - full version 
 
 // Initialize the map
 var map = L.map('map').setView([37.5, -119.5], 6);
@@ -7,10 +7,19 @@ setTimeout(() => {
   map.invalidateSize();
 }, 200);
 
-// Base Layer
+// Base Layer Options
 var baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors'
 }).addTo(map);
+const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri'
+});
+const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; Carto'
+});
+const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; Carto'
+});
 
 // Marker for clicked location
 var clickMarker = null;
@@ -408,23 +417,34 @@ map.on("zoomend", function () {
 // --- Controls ---
 
 // Layer Control
-L.control.layers({ "OpenStreetMap": baseOSM }, {
-  "Highway System": highwayLayer,
-  "All Roads": allRoadsLayer,
-  "State Highway Bridges": stateBridgesLayer,
-  "Local Bridges": localBridgesLayer,
-  "Public Schools (K-12)": schoolsLayer,
-  "Hospitals and Health Centers": healthCentLayer,
-  "Public Airports": pubAirport,
-  "Power Plants": powerPlants,
-  "Landslide Susceptibility": landslideLayer,
-  "Fire Hazard Zones": fireHazardLayer,
-  "Flood Hazard Zones": floodLayer,
-  "Shaking Potential": shakingLayer,
-  "Ozone Percentiles": ozoneLayer,
-  "PM2.5 Concentration": pmLayer,
-  "Water Contaminant Percentile": drinkP_Layer,
-}).addTo(map);
+L.control.layers(
+{ "OpenStreetMap": baseOSM,
+  "Esri Satellite": esriSat,
+  "Carto Light": cartoLight,
+  "Carto Dark": cartoDark},  // Base layer
+  {
+    // Infrastructure
+    "Schools": schoolsLayer,
+    "Hospitals": healthCentLayer,
+    "Power Plants": powerPlants,
+    "Airports": pubAirport,
+    "Highway System": highwayLayer,
+    "All Roads": allRoadsLayer,
+    "State Bridges": stateBridgesLayer,
+    "Local Bridges": localBridgesLayer,
+
+    // Hazards
+    "Fire Hazard Zones": fireHazardLayer,
+    "Flood Hazard Zones": floodLayer,
+    "Landslide Susceptibility": landslideLayer,
+    "Shaking Potential": shakingLayer,
+
+    // Health
+    "Ozone Percentiles": ozoneLayer,
+    "PM2.5 Concentration": pmLayer,
+    "Water Quality": drinkP_Layer
+  }
+).addTo(map);
 
 // Scale Bar
 L.control.scale({ imperial: true }).addTo(map);
@@ -432,32 +452,55 @@ L.control.scale({ imperial: true }).addTo(map);
 // Home Button
 var homeButton = L.control({ position: 'topleft' });
 homeButton.onAdd = function(map) {
-  var button = L.DomUtil.create('button', 'home-button');
-  button.innerHTML = '🏠';
+  var button = L.DomUtil.create('div', 'home-button leaflet-control leaflet-bar');
+  button.innerHTML = `<a href="#" id="home-button" title="Home"><span class="legend-icon">⌂</span></a>`;
   button.title = 'Reset View';
   button.onclick = function () {
     map.setView([37.5, -119.5], 6);
   };
+  L.DomEvent.disableScrollPropagation(button);
   L.DomEvent.disableClickPropagation(button);
   return button;
 };
 homeButton.addTo(map);
 
 // Legend Toggle
-var legendToggle = L.control({ position: 'topright' });
-legendToggle.onAdd = () => {
-  var div = L.DomUtil.create('div', 'map-widget leaflet-control leaflet-bar');
-  div.innerHTML = `<a href="#" id="legend-toggle" title="Show/Hide Legend">🗺️</a>`;
-  L.DomEvent.disableClickPropagation(div);
-  return div;
-};
-legendToggle.addTo(map);
+const LegendToggleControl = L.Control.extend({
+  options: { position: 'topright' },
+  onAdd: function (map) {
+    const container = L.DomUtil.create('div', 'leaflet-bar custom-legend-button');
+    container.innerHTML = '<span class="legend-icon">☰</span>';
+    container.title = 'Toggle Legend';
+    container.onclick = function () {
+      const legendPanels = document.getElementsByClassName('legend-panel');
+      for (const panel of legendPanels) {
+        panel.classList.toggle('hidden');
+      }
+    };
+    L.DomEvent.disableClickPropagation(container);
+    return container;
+  }
+});
+map.addControl(new LegendToggleControl());
 
 var legendPanel = L.control({ position: 'topright' });
 legendPanel.onAdd = () => {
   var div = L.DomUtil.create('div', 'legend-panel hidden');
+  
+  div.addEventListener('touchstart', function(e) {
+  e.stopPropagation();
+  }, { passive: false });
+
+  div.addEventListener('touchmove', function(e) {
+  e.stopPropagation();
+  }, { passive: false });
+
+  div.addEventListener('wheel', function(e) {
+  e.stopPropagation();
+  }, { passive: false });
+  
   div.innerHTML = `
-    <h4>Legends</h4>
+    <h2>Legends</h2>
     <div class="legend-section">
       <strong>Fire Hazard Zones</strong>
       <div><i style="background:#d7191c;"></i> Very High</div>
@@ -707,5 +750,5 @@ The drinking water contaminant percentile is <strong>${pct}</strong>, meaning it
     );
   }
 });
-
+  
 }); 
