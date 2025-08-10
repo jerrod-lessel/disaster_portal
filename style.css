@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   height: 100%;
   font-family: Arial, sans-serif;
-  overflow: hidden;
+  overflow: hidden; 
   background-color: black;
 }
 
@@ -271,6 +271,12 @@ html, body {
 }
 
 .power-icon {
+  font-size: 27px;  
+  text-align: center;
+  line-height: 1;
+}
+
+.evcharger-icon {
   font-size: 27px;  
   text-align: center;
   line-height: 1;
