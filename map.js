@@ -1,4 +1,4 @@
-// map.js - full version 
+ // map.js - full version 
 
 // Initialize the map
 var map = L.map('map').setView([37.5, -119.5], 6);
@@ -294,6 +294,101 @@ var powerPlants = L.esri.featureLayer({
   }
 });
 
+// --- OpenChargeMap EV Charger Layer (FINAL CORRECTED VERSION) ---
+
+const evChargersLayer = L.layerGroup(); // Create a simple layer group
+const OCM_API_KEY = '166f53f4-5ccd-4fae-92fe-e03a24423a7b';
+const OCM_ATTRIBUTION = '<a href="https://openchargemap.org/site">OpenChargeMap</a>';
+
+let isLoadingChargers = false;
+
+function getChargersInView() {
+    if (isLoadingChargers) return;
+    isLoadingChargers = true;
+ 
+    const bounds = map.getBounds();
+    const ocmUrl = `https://api.openchargemap.io/v3/poi/?output=json&boundingbox=(${bounds.getSouthWest().lat},${bounds.getSouthWest().lng}),(${bounds.getNorthEast().lat},${bounds.getNorthEast().lng})&maxresults=5000&key=${OCM_API_KEY}`;
+    
+    fetch(ocmUrl)
+        .then(response => response.json())
+        .then(data => {
+            evChargersLayer.clearLayers();
+
+            data.forEach(charger => {
+                if (charger.AddressInfo && charger.AddressInfo.Latitude && charger.AddressInfo.Longitude) {
+
+                    let totalPorts = 0;
+                    if (charger.Connections && charger.Connections.length > 0) {
+                        // Loop through each connection type at the location
+                        charger.Connections.forEach(connection => {
+                            // Add the quantity of each connection type to the total. Default to 1 if quantity isn't specified.
+                            totalPorts += connection.Quantity || 1; 
+                        });
+                    }
+
+                    const status = charger.StatusType?.Title ?? 'Unknown Status';
+                    const usage = charger.UsageType?.Title ?? 'Usage details not specified';
+                    const network = charger.OperatorInfo?.Title ?? 'Unknown Network';
+                    
+                    let equipmentInfo = '<li>No equipment details</li>';
+                    if (charger.Connections && charger.Connections.length > 0) {
+                        equipmentInfo = charger.Connections.map(conn => `
+                            <li>
+                                <strong>${conn.ConnectionType?.Title ?? 'Connector'} (${conn.Quantity || 1})</strong>: 
+                                <br> ${conn.PowerKW ?? 'N/A'} kW <br> ${conn.Voltage ?? 'N/A'} V <br> ${conn.Amps ?? 'N/A'} A <br> (${conn.Level?.Title ?? 'Level info unavailable'})
+                            </li>
+                        `).join('');
+                    }
+
+                    const marker = L.marker([charger.AddressInfo.Latitude, charger.AddressInfo.Longitude], {
+                        icon: L.divIcon({ html: "🔋", className: "evcharger-icon", iconSize: L.point(30, 30) })
+                    });
+
+                    // Build the popup using the new 'totalPorts' variable
+                    const popupContent = `
+                        <strong>${charger.AddressInfo.Title}</strong><br>
+                        <hr>
+                        <strong>Status:</strong> ${status} (${usage})<br>
+                        <strong>Network:</strong> ${network}<br>
+                        <strong>Total Charging Ports:</strong> ${totalPorts}<br>
+                        <br>
+                        <strong>Equipment Breakdown:</strong>
+                        <ul>${equipmentInfo}</ul>
+                    `;
+                    
+                    marker.bindPopup(popupContent);
+                    marker.addTo(evChargersLayer);
+                }
+            });
+            isLoadingChargers = false;
+        })
+        .catch(error => {
+            console.error('Error fetching OpenChargeMap data:', error);
+            isLoadingChargers = false;
+        });
+}
+
+// Setup the dynamic loading and initial call
+map.on('moveend', getChargersInView);
+getChargersInView();
+
+// Listen for when layers are added or removed from the map's layer control
+map.on('overlayadd', function(e) {
+    // If the layer being added is our EV charger layer...
+    if (e.layer === evChargersLayer) {
+        // ...add our custom attribution text to the map's attribution control.
+        this.attributionControl.addAttribution(OCM_ATTRIBUTION);
+    }
+});
+
+map.on('overlayremove', function(e) {
+    // If the layer being removed is our EV charger layer...
+    if (e.layer === evChargersLayer) {
+        // ...remove our custom attribution text.
+        this.attributionControl.removeAttribution(OCM_ATTRIBUTION);
+    }
+});
+
 // State bridges
 var stateBridgesLayer = L.esri.featureLayer({
   url: "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/State_Highway_Bridges/FeatureServer/0",
@@ -414,6 +509,15 @@ map.on("zoomend", function () {
   }
 });
 
+// EV Charger layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(evChargersLayer)) map.addLayer(evChargersLayer);
+  } else {
+    if (map.hasLayer(evChargersLayer)) map.removeLayer(evChargersLayer);
+  }
+});
+
 // --- Controls ---
 
 // Layer Control
@@ -432,6 +536,7 @@ L.control.layers(
     "All Roads": allRoadsLayer,
     "State Bridges": stateBridgesLayer,
     "Local Bridges": localBridgesLayer,
+    "EV Chargers": evChargersLayer,
 
     // Hazards
     "Fire Hazard Zones": fireHazardLayer,
