@@ -160,6 +160,64 @@ var shakingLayer = L.esri.dynamicMapLayer({
   opacity: 0.6
 })//.addTo(map);
 
+// --- Live Wildfire Incidents Layer (VERIFIED Public Source from NIFC) ---
+var calFireLayer = L.esri.featureLayer({
+  url: 'https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0',
+  where: "POOState = 'US-CA'",
+  attribution: 'National Interagency Fire Center',
+ 
+ pointToLayer: function (geojson, latlng) {
+  const props = geojson.properties;
+  const acres = props.IncidentSize || 0;
+  
+  // Define our size categories, including the CSS class name
+  let iconDetails = {
+    size: 30,
+    className: 'fire-icon fire-icon-sm' // Default for small fires
+  };
+
+  if (acres >= 10000) {
+    iconDetails = { size: 60, className: 'fire-icon fire-icon-xl' }; // Major
+  } else if (acres >= 1000) {
+    iconDetails = { size: 50, className: 'fire-icon fire-icon-lg' }; // Large
+  } else if (acres >= 100) {
+    iconDetails = { size: 40, className: 'fire-icon fire-icon-md' }; // Medium
+  }
+
+  return L.marker(latlng, {
+    icon: L.divIcon({
+      html: "🔥",
+      className: iconDetails.className, // Use the dynamic class name
+      iconSize: L.point(iconDetails.size, iconDetails.size), // Use the dynamic container size
+      // THIS IS THE KEY: It keeps the icon centered on the point
+      iconAnchor: [iconDetails.size / 2, iconDetails.size / 2]
+    })
+  });
+},
+
+  onEachFeature: function(feature, layer) {
+    // console.log("Fire Properties:", feature.properties); // Use for finding property names
+    const props = feature.properties;
+    const cause = props.FireCause || 'Undetermined';
+    const acres = (props.IncidentSize && props.IncidentSize > 0) ? Math.round(props.IncidentSize).toLocaleString() : 'N/A';
+    const contained = props.PercentContained ?? 0; // The name for Percent Contained
+    const updated = new Date(props.ModifiedOnDateTime_dt).toLocaleString(); // The name for Last Updated
+    const discovered = new Date(props.FireDiscoveryDateTime).toLocaleDateString(); // This one was already working
+  
+    // Build the new, more detailed popup content
+    const popupContent = `
+      <strong>${props.IncidentName || 'Unknown Fire'}</strong><hr>
+      <strong>Acres Burned:</strong> ${acres}<br>
+      <strong>Percent Contained:</strong> ${contained}%<br>
+      <strong>Cause:</strong> ${cause}<br> 
+      <strong>Discovered:</strong> ${discovered}<br>
+      <strong>Last Updated:</strong> ${updated}
+    `;
+
+    layer.bindPopup(popupContent);
+  }
+});
+
 // Caltrans National Highway System (visible at zoom <= 10)
 var highwayLayer = L.esri.featureLayer({
   url: 'https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/National_Highway_System/MapServer/0',
@@ -294,8 +352,7 @@ var powerPlants = L.esri.featureLayer({
   }
 });
 
-// --- OpenChargeMap EV Charger Layer (FINAL CORRECTED VERSION) ---
-
+// OpenChargeMap EV Chargers
 const evChargersLayer = L.layerGroup(); // Create a simple layer group
 const OCM_API_KEY = '166f53f4-5ccd-4fae-92fe-e03a24423a7b';
 const OCM_ATTRIBUTION = '<a href="https://openchargemap.org/site">OpenChargeMap</a>';
@@ -519,7 +576,6 @@ map.on("zoomend", function () {
 });
 
 // --- Controls ---
-
 // Layer Control
 L.control.layers(
 { "OpenStreetMap": baseOSM,
@@ -543,6 +599,7 @@ L.control.layers(
     "Flood Hazard Zones": floodLayer,
     "Landslide Susceptibility": landslideLayer,
     "Shaking Potential": shakingLayer,
+    "Active Fires": calFireLayer,
 
     // Health
     "Ozone Percentiles": ozoneLayer,
