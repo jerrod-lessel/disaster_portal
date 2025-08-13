@@ -425,9 +425,101 @@ function getChargersInView() {
         });
 }
 
+// --- Colleges & Universities Layer ---
+var universitiesLayer = L.esri.featureLayer({
+  url: 'https://services1.arcgis.com/Hp6G80Pky0om7QvQ/arcgis/rest/services/Colleges_and_Universities/FeatureServer/0',
+  where: "STATE = 'CA'",
+  attribution: 'HIFLD Open Data',
+
+  pointToLayer: function (geojson, latlng) {
+    return L.marker(latlng, {
+      icon: L.divIcon({
+        html: "🎓", 
+        className: 'university-icon',
+        iconSize: L.point(30, 30)
+      })
+    });
+  },
+
+  onEachFeature: function(feature, layer) {
+    const props = feature.properties;
+    
+    // Format the student enrollment number
+    const enrollment = props.TOT_ENROLL ? props.TOT_ENROLL.toLocaleString() : 'N/A';
+
+    const popupContent = `
+      <strong>${props.NAME || 'Unknown Institution'}</strong><hr>
+      <strong>Type:</strong> ${props.TYPE || 'N/A'}<br>
+      <strong>Status:</strong> ${props.STATUS || 'N/A'}<br>
+      <strong>Total Enrollment:</strong> ${enrollment}<br>
+      <strong>City:</strong> ${props.CITY || 'N/A'}
+    `;
+
+    layer.bindPopup(popupContent);
+  }
+});
+
+// --- Parks and Green Space Layer (Using Your Verified CNRA Source) ---
+var parksLayer = L.esri.featureLayer({
+  // This is the excellent URL you found from the CA Natural Resources Agency
+  url: 'https://gis.cnra.ca.gov/arcgis/rest/services/Boundaries/CPAD_AccessType/MapServer/1',
+  // A simple green style for the park polygons
+  style: function () {
+    return { 
+      color: "#2E8B57", // "SeaGreen"
+      weight: 1, 
+      fillOpacity: 0.5 
+    };
+  },
+  attribution: 'CA Natural Resources Agency (CPAD)',
+
+  onEachFeature: function(feature, layer) {
+    const props = feature.properties;
+    
+    // Create popup content with the park's name and access type
+    const popupContent = `
+      <strong>${props.LABEL_NAME || 'Unnamed Park Area'}</strong><hr>
+      <strong>Access Type:</strong> ${props.ACCESS_TYP || 'N/A'}<br>
+      <strong>Acres:</strong> ${props.ACRES || 'N/A'}<br>
+      <strong>Manager:</strong> ${props.AGNCY_NAME || 'N/A'}
+    `;
+
+    layer.bindPopup(popupContent);
+  }
+});
+
 // Setup the dynamic loading and initial call
 map.on('moveend', getChargersInView);
 getChargersInView();
+
+// --- Fire Stations Layer (Using Your Verified CalOES Source) ---
+var fireStationsLayer = L.esri.featureLayer({
+  url: 'https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Structures_Medical_Emergency_Response_v1/FeatureServer/2',
+  where: "STATE = 'CA'",
+  attribution: 'Esri Federal Data/NGDA',
+
+  pointToLayer: function (geojson, latlng) {
+    return L.marker(latlng, {
+      icon: L.divIcon({
+        html: "🚒", // Fire truck emoji
+        className: 'fire-station-icon',
+        iconSize: L.point(30, 30)
+      })
+    });
+  },
+
+  onEachFeature: function(feature, layer) {
+    const props = feature.properties;
+
+    const popupContent = `
+      <strong>${props.NAME || 'Unknown Station'}</strong><hr>
+      <strong>Address:</strong> ${props.ADDRESS || 'N/A'}<br>
+      <strong>City:</strong> ${props.CITY || 'N/A'}<br>
+    `;
+
+    layer.bindPopup(popupContent);
+  }
+});
 
 // Listen for when layers are added or removed from the map's layer control
 map.on('overlayadd', function(e) {
@@ -575,6 +667,33 @@ map.on("zoomend", function () {
   }
 });
 
+// Universities layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(universitiesLayer)) map.addLayer(universitiesLayer);
+  } else {
+    if (map.hasLayer(universitiesLayer)) map.removeLayer(universitiesLayer);
+  }
+});
+
+// Fire stations layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(fireStationsLayer)) map.addLayer(fireStationsLayer);
+  } else {
+    if (map.hasLayer(fireStationsLayer)) map.removeLayer(fireStationsLayer);
+  }
+});
+
+// Parks layer level zoom logic
+map.on("zoomend", function () {
+  if (map.getZoom() >= 14) {
+    if (!map.hasLayer(parksLayer)) map.addLayer(parksLayer);
+  } else {
+    if (map.hasLayer(parksLayer)) map.removeLayer(parksLayer);
+  }
+});
+
 // --- Controls ---
 // Layer Control
 L.control.layers(
@@ -585,14 +704,17 @@ L.control.layers(
   {
     // Infrastructure
     "Schools": schoolsLayer,
+    "Universities": universitiesLayer,
     "Hospitals": healthCentLayer,
     "Power Plants": powerPlants,
     "Airports": pubAirport,
+    "Fire Stations": fireStationsLayer,
     "Highway System": highwayLayer,
     "All Roads": allRoadsLayer,
     "State Bridges": stateBridgesLayer,
     "Local Bridges": localBridgesLayer,
     "EV Chargers": evChargersLayer,
+    "Parks": parksLayer,
 
     // Hazards
     "Fire Hazard Zones": fireHazardLayer,
