@@ -2,9 +2,9 @@ README.md (Starter Template)
 markdown
 Copy
 Edit
-# California Disaster Risk Portal 🌎🔥🌊🪨
+# Geospatial Mainfold 🌎🔥🌊🪨
 
-An interactive web map for exploring wildfire, flood, and landslide hazard risks across California — built with Leaflet, Esri Leaflet, and open data.
+An interactive web map for exploring hazard, health, and resilience data across California. — built with Leaflet, Esri Leaflet, and open data.
 
 ## 🚀 Features
 
