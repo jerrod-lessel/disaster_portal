@@ -1,7 +1,4 @@
-README.md (Starter Template)
-markdown
-Copy
-Edit
+README.md 
 # Geospatial Mainfold 🌎🔥🌊🪨
 
 An interactive web map for exploring hazard, health, and resilience data across California. — built with Leaflet, Esri Leaflet, and open data.
